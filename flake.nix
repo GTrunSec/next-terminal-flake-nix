@@ -9,6 +9,8 @@
     defaultPackage.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux";};
       let
+        static = callPackage ./static.nix { inherit ranz2nix next-terminal;};
+        guacamole = callPackage ./guacamole.nix { };
         src = pkgs.fetchFromGitHub {
           owner = "dushixiang";
           repo = "next-terminal";
@@ -20,10 +22,10 @@
           name = "next-terminal";
           inherit src;
           goPackagePath = "github.com/dushixiang/next-terminal";
-          subPackages = [ "pkg" ];          #subPackages = [ "cmd/photoprism" ];
+          subPackages = [ "pkg" ];
           buildInputs = [ gcc pkgconfig ]
-              ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
-              ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
+                        ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+                        ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
           vendorSha256 = "sha256-vquM0tDepFwQjNFJrkZylpXtdegPuY3vVaqp/52o4SA=";
           GOARCH = if stdenv.isDarwin then "amd64"
                    else if stdenv.hostPlatform.system == "i686-linux" then "386"
@@ -31,13 +33,26 @@
                    else if stdenv.isAarch32 then "arm"
                    else throw "Unsupported system";
           CC = if stdenv.isDarwin then "clang" else "cc";
+
+          preConfigure = ''
+          substituteInPlace pkg/api/routes.go \
+          --replace "web/build/index.html" "$out/web/build/index.html" \
+          --replace "web/build/static" "$out/web/build/static" \
+          --replace "web/build/favicon.ico" "$out/web/build/favicon.ico" \
+          --replace "web/build/logo.svg" "$out/web/build/logo.svg"
+           '';
+
           buildPhase = ''
           go build
           '';
+
           installPhase = ''
-          mkdir -p $out/bin
-          next-terminal $out/bin/next-terminal
+          mkdir -p $out/{bin,web}
+          cp -r ${static} $out/web/build
+          cp -r next-terminal $out/bin/next-terminal
+          ln -s ${guacamole}/sbin/guacd $out/bin/guacd
           '';
+
         };
   };
 }
