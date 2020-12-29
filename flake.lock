@@ -1,0 +1,60 @@
+{
+  "nodes": {
+    "next-terminal": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1609174811,
+        "narHash": "sha256-qlsQ6RWw4wkbfLN2U18EPpfnnTT1tKZYD/XGLaWiNw8=",
+        "owner": "dushixiang",
+        "repo": "next-terminal",
+        "rev": "55919cc4ac1571c2676e75e64b3daeb0cac13560",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dushixiang",
+        "repo": "next-terminal",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1607560137,
+        "narHash": "sha256-qI5U28r9Ie11OlkwzNFkhW0Z4jLanntJdb3JeFq/85A=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "7ff5e241a2b96fff7912b7d793a06b4374bd846c",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "rev": "7ff5e241a2b96fff7912b7d793a06b4374bd846c",
+        "type": "indirect"
+      }
+    },
+    "ranz2nix": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1594668772,
+        "narHash": "sha256-JE7lk0rDP5itZqWOwjuv8N18xLbGc6XL/0u9rMnhXUk=",
+        "owner": "andir",
+        "repo": "ranz2nix",
+        "rev": "637276c3110716d2a798e737fe62e54b37190d50",
+        "type": "github"
+      },
+      "original": {
+        "owner": "andir",
+        "repo": "ranz2nix",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "next-terminal": "next-terminal",
+        "nixpkgs": "nixpkgs",
+        "ranz2nix": "ranz2nix"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
