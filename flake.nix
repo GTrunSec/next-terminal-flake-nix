@@ -26,7 +26,7 @@
           buildInputs = [ gcc pkgconfig ]
                         ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
                         ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
-          vendorSha256 = "sha256-vquM0tDepFwQjNFJrkZylpXtdegPuY3vVaqp/52o4SA=";
+          vendorSha256 = "sha256-KWv5ErnsGILcIHu/HgXJTomQYYoFqNmxs1ZC6gQlfK0=";
           GOARCH = if stdenv.isDarwin then "amd64"
                    else if stdenv.hostPlatform.system == "i686-linux" then "386"
                    else if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
