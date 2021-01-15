@@ -1,0 +1,38 @@
+#+TITLE: Readme
+
+
+* Install nix
+
+#+begin_src sh :async t :exports both :results output
+wget https://github.com/hardenedlinux/nix-fpm-multiuser/releases/download/19700101/nix_3.0.pre19700101.master_amd64.deb
+sudo dpkg -i nix_3.0.pre19700101.master_amd64.deb
+#+end_src
+
+
+or install from nixos
+#+begin_src sh :async t :exports both :results output
+curl -L https://nixos.org/nix/install | sh
+#+end_src
+
+* build next-terminal
+#+begin_src sh :async t :exports both :results output
+git clone https://github.com/GTrunSec/next-terminal-flake-nix.git
+cd next-terminal-flake-nix/
+nix-build
+#+end_src
+check ./result files
+
+
+#+begin_src sh :async t :exports both :results output
+tree -L 2 ./result
+#+end_src
+
+#+RESULTS:
+: ./result
+: ├── bin
+: │   ├── guacd -> /nix/store/il0lc4a716ap5wwxdg5b17vpax3jl3aq-guacamole-0.9.14/sbin/guacd
+: │   └── next-terminal
+: └── web
+:     └── build
+:
+: 3 directories, 2 files
