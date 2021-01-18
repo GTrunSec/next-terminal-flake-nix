@@ -34,6 +34,7 @@
                    else throw "Unsupported system";
           CC = if stdenv.isDarwin then "clang" else "cc";
 
+
           preConfigure = ''
           substituteInPlace pkg/api/routes.go \
           --replace "web/build/index.html" "$out/web/build/index.html" \
@@ -54,5 +55,6 @@
           '';
 
         };
+    checks.x86_64-linux.build = self.defaultPackage.x86_64-linux;
   };
 }
