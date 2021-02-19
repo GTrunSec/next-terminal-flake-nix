@@ -4,26 +4,30 @@
 
 stdenv.mkDerivation rec {
   name = "guacamole-${version}";
-  version = "0.9.14";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "apache";
-    repo = "incubator-guacamole-server";
-    rev = "7c191d7be0441a1cb64c90ab62d6535f3798eacb";
-    sha256 = "105zrav6igvj0cvc8208bgp9jffc1w4mvmn3h7mkx6pgam50hnvs";
+    repo = "guacamole-server";
+    rev = "90e15cb70635e8d13ebdefec9262701d2179983a";
+    sha256 = "sha256-fUkWn+NPfWEr35Yrt+OBf3/baz1xYdpWVise336RrJo=";
   };
   NIX_CFLAGS_COMPILE= [
     "-Wno-error=format-truncation"
     "-Wno-error=format-overflow"
   ];
+
   buildInputs = with stdenv; [ freerdp freerdpUnstable autoreconfHook pkgconfig cairo libpng libjpeg_turbo libossp_uuid pango libssh2 libvncserver libpulseaudio openssl libvorbis libwebp libtelnet perl makeWrapper];
 
   propogatedBuildInputs = with stdenv; [ freerdp autoreconfHook pkgconfig cairo libpng libjpeg_turbo libossp_uuid freerdp pango libssh2 libvncserver libpulseaudio openssl libvorbis libwebp inetutils];
 
   patchPhase = ''
-    substituteInPlace ./src/protocols/rdp/keymaps/generate.pl --replace /usr/bin/perl "${perl}/bin/perl"
+    substituteInPlace ./src/protocols/rdp/keymaps/generate.pl --replace "/usr/bin/env perl" "${perl}/bin/perl"
+    substituteInPlace ./src/protocols/rdp/plugins/generate-entry-wrappers.pl --replace "/usr/bin/env perl" "${perl}/bin/perl"
     substituteInPlace ./src/protocols/rdp/Makefile.am --replace "-Werror -Wall" "-Wall"
+    substituteInPlace ./src/protocols/rdp/Makefile.am --replace "@FREERDP2_PLUGIN_DIR@" "$out/lib"
   '';
+
   postInstall = ''
     wrapProgram $out/sbin/guacd --prefix LD_LIBRARY_PATH ":" $out/lib
     '';
