@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Clientless remote desktop gateway";
     homepage = "https://guacamole.incubator.apache.org/";
-    maintainers = [ stdenv.lib.maintainers.tomberek ];
+    maintainers = [ tomberek gtunsec ];
     license = licenses.asl20;
     platforms = platforms.linux;
   };
