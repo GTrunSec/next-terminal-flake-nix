@@ -46,5 +46,5 @@ tree -L 2 ./result
 * Deploy next-terminal
 ~deploy~ with args to your <ip:port>
 #+begin_src sh :async t :exports both :results output
-nix develop github:GTrunSec/photoprism-flake -c deploy 127.0.0.1:8889
+nix develop github:GTrunSec/next-terminal-flake-nix -c deploy 127.0.0.1:8889
 #+end_src
