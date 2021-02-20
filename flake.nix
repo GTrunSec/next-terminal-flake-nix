@@ -9,16 +9,39 @@
       url = "github:dushixiang/next-terminal";
       flake = false;
     };
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = inputs@{ self, nixpkgs, ranz2nix, next-terminal }:
-    let
-      supportedSystems =
-        [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
-      forAllSystems = f:
-        nixpkgs.lib.genAttrs supportedSystems (system: f system);
-    in
-    {
+  outputs = inputs@{ self, nixpkgs, ranz2nix, next-terminal, flake-utils }:
+    flake-utils.lib.eachDefaultSystem
+      (
+        system:
+        let
+          pkgs = import nixpkgs {
+            inherit system; overlays = [
+            self.overlay
+          ];
+          };
+        in
+        with pkgs;
+        rec {
+          packages = flake-utils.lib.flattenTree {
+            next-terminal = pkgs.next-terminal;
+          };
+          defaultPackage = packages.next-terminal;
+          checks = packages.next-terminal;
+          devShell =
+            let
+              deploy = pkgs.writeShellScriptBin "deploy" ''
+                ${pkgs.next-terminal}/bin/next-terminal --server.addr "$@" & \
+                ${pkgs.next-terminal}/bin/guacd -b 127.0.0.1 -L info -f | parallel
+              '';
+            in
+            mkShell {
+              buildInputs = [ deploy ];
+            };
+        }
+      ) // {
       overlay = final: prev: {
         next-terminal = with final;
           (
@@ -39,8 +62,8 @@
               goPackagePath = "github.com/dushixiang/next-terminal";
               subPackages = [ "pkg" ];
               buildInputs = [ gcc pkgconfig ]
-                ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
-                ++ lib.optionals (stdenv.hostPlatform.libc == "glibc")
+              ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+              ++ lib.optionals (stdenv.hostPlatform.libc == "glibc")
                 [ stdenv.cc.libc.static ];
               vendorSha256 =
                 "sha256-KWv5ErnsGILcIHu/HgXJTomQYYoFqNmxs1ZC6gQlfK0=";
@@ -79,15 +102,5 @@
             }
           );
       };
-
-
-      defaultPackage = forAllSystems (system:
-        (import nixpkgs {
-          inherit system;
-          overlays = [ self.overlay ];
-        }).next-terminal);
-
-      checks.x86_64-linux.build = self.defaultPackage.x86_64-linux;
-
     };
 }
