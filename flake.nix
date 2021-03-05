@@ -33,7 +33,7 @@
           devShell =
             let
               deploy = pkgs.writeShellScriptBin "deploy" ''
-                ${pkgs.next-terminal}/bin/next-terminal --server.addr "$@" & \
+                 ${pkgs.next-terminal}/bin/next-terminal --server.addr "$@" & \
                 ${pkgs.next-terminal}/bin/guacd -b 127.0.0.1 -L info -f | parallel
               '';
             in
