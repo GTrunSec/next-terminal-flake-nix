@@ -15,6 +15,7 @@ let
 
     nodejs = nodejs-12_x;
     sourcePath = src + "/web/";
+    lockFilePath = ./package-lock.json;
     packageOverride = name: spec:
       if name == "minimist" && spec ? resolved && spec.resolved == "" then {
         resolved = "file://" + (
