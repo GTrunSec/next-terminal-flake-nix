@@ -10,12 +10,22 @@
 }:
 let
   src = next-terminal;
+  patchedPackageLockFile = runCommand "patch"
+    {
+      inherit src;
+    }
+    ''
+      cp -r $src/web/package-lock.json .
+      chmod -R +rw package-lock.json
+      sed -i 's|https://registry.npm.taobao.org/dayjs/download/dayjs-1.10.4.tgz?cache=0&sync_timestamp=1611309982734&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdayjs%2Fdownload%2Fdayjs-1.10.4.tgz|https://registry.npm.taobao.org/dayjs/download/dayjs-1.10.4.tgz|' package-lock.json
+      cp package-lock.json $out
+    '';
 
   noderanz = callPackage ranz2nix {
 
     nodejs = nodejs-12_x;
     sourcePath = src + "/web/";
-    lockFilePath = ./package-lock.json;
+    lockFilePath = patchedPackageLockFile;
     packageOverride = name: spec:
       if name == "minimist" && spec ? resolved && spec.resolved == "" then {
         resolved = "file://" + (
