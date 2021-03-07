@@ -18,11 +18,11 @@
     "next-terminal": {
       "flake": false,
       "locked": {
-        "lastModified": 1614953828,
-        "narHash": "sha256-x5KNPMEuoqxt1U7MaMH3tFTzaaWaIvhuUI2dXsdeTmQ=",
+        "lastModified": 1615022410,
+        "narHash": "sha256-upVrPK0eHr1HS/K4uf/xdfZTgQW4ioBB+bIZV6ENnQ8=",
         "owner": "dushixiang",
         "repo": "next-terminal",
-        "rev": "1e9f350015fa02d51cba3928484d37ba2bea7e2a",
+        "rev": "c3405a1752fd658bdfe6b864b10949f4dbd195f0",
         "type": "github"
       },
       "original": {
